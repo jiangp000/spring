@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+<!--    注册bean-->
+    <bean id ="userService" class="com.kuang.Service.UserServiceImpl"></bean>
+    <bean id="log" class="com.kuang.log.log"></bean>
+    <bean id="afterlig" class="com.kuang.log.afterlog"></bean>
+<!--    配置 aop-->
+<!--    使用原生的spring api接口-->
+<!--    需要导入aop的约束-->
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="pointcut" expression="execution(* com.kuang.Service.UserServiceImpl.*(..))"/>-->
+<!--        <aop:advisor advice-ref="log" pointcut-ref="pointcut"/>-->
+<!--        <aop:advisor advice-ref="afterlog" pointcut-ref="pointcut"/>-->
+
+<!--    </aop:config>-->
+
+    <bean id="diy" class="com.kuang.diy.DiyPointCut"></bean>
+    <aop:config>
+<!--        自定义切面   ref是要引用的类 三件套-->
+        <aop:aspect ref="diy">
+<!--            切入点-->
+                <aop:pointcut id="point" expression="execution(* com.kuang.Service.UserServiceImpl.*(..))"/>
+<!--                通知-->
+                <aop:before method="before"   pointcut-ref="point"/>
+                <aop:after  method="after"    pointcut-ref="point"/>
+        </aop:aspect>
+    </aop:config>
+</beans>
